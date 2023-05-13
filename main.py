@@ -36,6 +36,27 @@ def visualize(G):
     plt.tight_layout()
     plt.show()
 
+def dijkstra(G,src):
+    visited = {}
+    dist = {}
+    for node in G.nodes:
+        visited[node] = False
+        dist[node] = float('inf')
+
+    dist[src] = 0
+
+    while True:
+        min_dist = float('inf')
+        for node in G.nodes:
+            if dist[node]<min_dist and not visited[node]:
+                min_dist = dist[node]
+                curr_node = node
+        if min_dist == float('inf'): 
+            break
+        for neighbor in G.neighbors(curr_node):
+            dist[neighbor] = min(dist[neighbor],min_dist + G.get_edge_data(curr_node,neighbor)['weight'])
+
+    return dist
 
 
 if __name__ == '__main__':
