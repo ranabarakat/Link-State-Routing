@@ -4,13 +4,17 @@ import sys
 # plt.use('TKAgg')
 
 
-def init(num_nodes, num_edges):
+def init(graph_data):
     graph = nx.Graph()
-    for _ in range(max(num_nodes, num_edges)):
-        n1, n2, w = input().split(',')
-        graph.add_node(str(n1))
-        graph.add_node(str(n2))
-        graph.add_edge(str(n1), str(n2), weight=float(w))
+    # for _ in range(max(num_nodes, num_edges)):
+    for data in graph_data:
+        # n1, n2, w = input().split(',')
+        # graph.add_node(str(n1))
+        # graph.add_node(str(n2))
+        # graph.add_edge(str(n1), str(n2), weight=float(w))
+        graph.add_node(str(data[0]))
+        graph.add_node(str(data[1]))
+        graph.add_edge(str(data[0]), str(data[1]), weight=float(data[2]))
     return graph
 
 
@@ -96,12 +100,18 @@ def print_tables(G):
                 print(f"({src},{nxt})")
 
 
-
 if __name__ == '__main__':
-    # nodes,edges = sys.argv[1:3]
-    nodes, edges = map(int, input().split(','))
+    # nodes, edges = map(int, input().split(','))
+    graph_data = []
+    with open('input.txt') as f:
+        nodes, edges = map(int, f.readline().split(','))
+        for line in f:
+            n1, n2, weight = line.split(',')
+            graph_data.append([n1, n2, weight])
 
-    G = init(nodes, edges)
+    # G = init(nodes, edges)
+    print(graph_data)
+    G = init(graph_data)
     # dist,pred = dijkstra(G,'u')
     # print(dist)
     # print(pred)
