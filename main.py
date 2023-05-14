@@ -1,6 +1,7 @@
 import networkx as nx
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import sys
+# plt.use('TKAgg')
 
 
 def init(num_nodes, num_edges):
@@ -14,6 +15,7 @@ def init(num_nodes, num_edges):
 
 
 def visualize(G):
+    plt.figure(figsize=(20, 20))
     # positions for all nodes - seed for reproducibility
     pos = nx.spring_layout(G, seed=7)
 
@@ -28,15 +30,16 @@ def visualize(G):
 
     # edge weight labels
     edge_labels = nx.get_edge_attributes(G, "weight")
-    nx.draw_networkx_edge_labels(G, pos, edge_labels)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels, font_size=8)
 
     # ax = plt.gca()
     # ax.margins(0.08)
-    plt.axis("off")
-    plt.tight_layout()
+    # plt.axis("off")
+    # plt.tight_layout()
     plt.show()
 
-def dijkstra(G,src):
+
+def dijkstra(G, src):
     visited = {}
     dist = {}
     predecessors = {}
@@ -50,38 +53,37 @@ def dijkstra(G,src):
     while True:
         min_dist = float('inf')
         for node in G.nodes:
-            if dist[node]<min_dist and not visited[node]:
+            if dist[node] < min_dist and not visited[node]:
                 visited[node] = True
                 min_dist = dist[node]
                 curr_node = node
 
-        if min_dist == float('inf'): 
+        if min_dist == float('inf'):
             break
         for neighbor in G.neighbors(curr_node):
             # dist[neighbor] = min(dist[neighbor],min_dist + G.get_edge_data(curr_node,neighbor)['weight'])
-            temp = min_dist + G.get_edge_data(curr_node,neighbor)['weight']
+            temp = min_dist + G.get_edge_data(curr_node, neighbor)['weight']
             if temp < dist[neighbor]:
                 predecessors[neighbor] = curr_node
                 dist[neighbor] = temp
 
+    return dist, predecessors
 
-    return dist,predecessors
 
-def gen_forwarding_table(G,src,dst):
-    _,predecessors = dijkstra(G,src)
+def gen_forwarding_table(G, src, dst):
+    _, predecessors = dijkstra(G, src)
     path = []
+    # original_dst = dst
     while not dst == None:
         path.append(dst)
         dst = predecessors[dst]
     path.reverse()
-    # print(f"path from {src} to {dst}: {path}")
-    return src,path[1]
-    
-
-
+    # print(f"path from {src} to {original_dst}: {path}")
+    return src, path[1]
 
     # node = nx.dijkstra_path(G, src, dst,weight="weight")[1]
     # return src,node
+
 
 def print_tables(G):
     for node in G.nodes:
@@ -89,12 +91,9 @@ def print_tables(G):
         print(f"Destination\tLink")
         for dst in G.nodes:
             if not node == dst:
-                print(f"{dst}\t\t",end="")
-                src,nxt = gen_forwarding_table(G,node,dst)
+                print(f"{dst}\t\t", end="")
+                src, nxt = gen_forwarding_table(G, node, dst)
                 print(f"({src},{nxt})")
-
-
-
 
 
 
@@ -107,7 +106,7 @@ if __name__ == '__main__':
     # print(dist)
     # print(pred)
     print_tables(G)
-    # visualize(G)
+    visualize(G)
 
 
 # u,v,2
