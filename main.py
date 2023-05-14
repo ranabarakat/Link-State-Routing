@@ -1,7 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import sys
-# plt.use('TKAgg')
 
 
 def init(graph_data):
@@ -35,11 +34,6 @@ def visualize(G):
     # edge weight labels
     edge_labels = nx.get_edge_attributes(G, "weight")
     nx.draw_networkx_edge_labels(G, pos, edge_labels, font_size=8)
-
-    # ax = plt.gca()
-    # ax.margins(0.08)
-    # plt.axis("off")
-    # plt.tight_layout()
     plt.show()
 
 
