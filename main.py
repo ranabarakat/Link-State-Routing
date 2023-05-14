@@ -77,7 +77,7 @@ def gen_forwarding_table(G, src, dst):
         dst = predecessors[dst]
     path.reverse()
     # print(f"path from {src} to {original_dst}: {path}")
-    return src, path[1]
+    return src, path
 
     # node = nx.dijkstra_path(G, src, dst,weight="weight")[1]
     # return src,node
@@ -86,12 +86,12 @@ def gen_forwarding_table(G, src, dst):
 def print_tables(G):
     for node in G.nodes:
         print(f"\n-------- Forwarding table of node {node} --------\n")
-        print(f"Destination\tLink")
+        print(f"Destination\tLink\tPath")
         for dst in G.nodes:
             if not node == dst:
                 print(f"{dst}\t\t", end="")
-                src, nxt = gen_forwarding_table(G, node, dst)
-                print(f"({src},{nxt})")
+                src, path = gen_forwarding_table(G, node, dst)
+                print(f"({src},{path[1]})\t{path}")
 
 
 if __name__ == '__main__':
